@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db';
 import { ApiResponse } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
-import { EventParticipant, MatchPlayer } from '@prisma/client';
 
 export async function GET(request: NextRequest) {
   try {
@@ -43,7 +42,7 @@ export async function GET(request: NextRequest) {
       }
     >();
 
-    participants.forEach((participant: EventParticipant) => {
+    participants.forEach((participant) => {
       if (!playerStats.has(participant.playerId)) {
         playerStats.set(participant.playerId, {
           id: participant.playerId,
@@ -60,7 +59,7 @@ export async function GET(request: NextRequest) {
       stats.totalGames += 1;
     });
 
-    matchPlayers.forEach((matchPlayer: MatchPlayer) => {
+    matchPlayers.forEach((matchPlayer) => {
       const match = matchPlayer.match;
       const players = match.players;
 

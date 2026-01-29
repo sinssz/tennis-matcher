@@ -2,7 +2,6 @@ import { prisma } from '@/lib/db';
 import { generateRound } from '@/algorithm/generator';
 import { ApiResponse } from '@/types';
 import { NextRequest, NextResponse } from 'next/server';
-import { ZodError } from 'zod';
 import { getMatchHistory, getGamesPlayedMap } from '@/algorithm/utils';
 
 export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
@@ -22,8 +21,15 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     const event = await prisma.event.findUnique({
       where: { id: eventId },
       include: {
-        participants: true,
+        participants: {
+          include: {
+            player: true,
+          },
+        },
         matches: {
+          include: {
+            players: true,
+          },
           orderBy: [{ roundNumber: 'asc' }, { courtNumber: 'asc' }],
         },
       },
@@ -70,12 +76,12 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     }
 
     const createdMatches = await Promise.all(
-      result.matches.map(async (match) => {
+      result.matches.map(async (match, index) => {
         const matchData = await prisma.match.create({
           data: {
             eventId,
             roundNumber,
-            courtNumber: match.team1.length === 1 ? match.team1[0].name : match.team1[0].name,
+            courtNumber: index + 1,
             matchType: match.matchType,
             status: 'SCHEDULED',
             team1Score: null,
@@ -124,13 +130,6 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
 
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
-    if (error instanceof ZodError) {
-      const response: ApiResponse<null> = {
-        error: error.errors[0].message,
-      };
-      return NextResponse.json(response, { status: 400 });
-    }
-
     console.error('Error generating round:', error);
     const response: ApiResponse<null> = {
       error: '라운드 생성에 실패했습니다.',

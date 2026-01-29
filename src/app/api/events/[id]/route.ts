@@ -15,7 +15,7 @@ import { ZodError } from 'zod';
  * GET /api/events/[id]
  * Fetch event details with participants and matches
  */
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 
@@ -153,8 +153,9 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json(response, { status: 200 });
   } catch (error) {
     if (error instanceof ZodError) {
+      const message = error.issues[0]?.message || 'Invalid input';
       const response: ApiResponse<null> = {
-        error: error.errors[0].message,
+        error: message,
       };
       return NextResponse.json(response, { status: 400 });
     }
@@ -171,7 +172,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
  * DELETE /api/events/[id]
  * Delete an event (cascades to participants and matches)
  */
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 

@@ -9,7 +9,7 @@ import { ZodError } from 'zod';
  * GET /api/players/[id]
  * Fetch a specific player by ID
  */
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 
@@ -96,7 +96,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   } catch (error) {
     if (error instanceof ZodError) {
       const response: ApiResponse<null> = {
-        error: error.errors[0].message,
+        error: error.issues[0]?.message || 'Invalid input',
       };
       return NextResponse.json(response, { status: 400 });
     }
@@ -113,7 +113,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
  * DELETE /api/players/[id]
  * Delete a player
  */
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_request: NextRequest, { params }: { params: { id: string } }) {
   try {
     const { id } = params;
 

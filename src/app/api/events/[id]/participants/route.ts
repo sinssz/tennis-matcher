@@ -107,8 +107,9 @@ export async function POST(request: NextRequest, { params }: { params: { id: str
     return NextResponse.json(response, { status: 201 });
   } catch (error) {
     if (error instanceof ZodError) {
+      const message = error.issues[0]?.message || 'Invalid input';
       const response: ApiResponse<null> = {
-        error: error.errors[0].message,
+        error: message,
       };
       return NextResponse.json(response, { status: 400 });
     }
