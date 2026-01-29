@@ -1,4 +1,9 @@
-export function getGamesPlayedMap(participants: any[]): Map<string, number> {
+interface Participant {
+  playerId: string;
+  gamesPlayed: number;
+}
+
+export function getGamesPlayedMap(participants: Participant[]): Map<string, number> {
   const map = new Map<string, number>();
 
   participants.forEach((p) => {
@@ -8,8 +13,25 @@ export function getGamesPlayedMap(participants: any[]): Map<string, number> {
   return map;
 }
 
-export function getMatchHistory(matches: any[]): any[] {
-  const history: any[] = [];
+interface MatchPlayer {
+  playerId: string;
+  team: number;
+}
+
+interface Match {
+  players: MatchPlayer[];
+}
+
+interface MatchHistoryEntry {
+  player1Id: string;
+  player2Id: string;
+  player3Id?: string;
+  player4Id?: string;
+  asOpponents: boolean;
+}
+
+export function getMatchHistory(matches: Match[]): MatchHistoryEntry[] {
+  const history: MatchHistoryEntry[] = [];
 
   matches.forEach((match) => {
     const players = match.players;

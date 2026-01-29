@@ -3,6 +3,7 @@ import type {
   GenerateRoundOutput,
   GeneratedMatch,
   AlgorithmPlayer,
+  MatchHistory,
 } from './types';
 import { calculateTotalScore, type ScoringWeights } from './scoring';
 
@@ -63,7 +64,7 @@ export function generateRound(input: GenerateRoundInput): GenerateRoundOutput {
 function findBestMatches(
   availablePlayers: AlgorithmPlayer[],
   weights: ScoringWeights,
-  context: { gamesPlayedMap: Map<string, number>; matchHistory: any[] }
+  context: { gamesPlayedMap: Map<string, number>; matchHistory: MatchHistory[] }
 ): GeneratedMatch[] {
   const possibleMatches: GeneratedMatch[] = [];
   const n = availablePlayers.length;
@@ -97,7 +98,7 @@ export function findNextRoundMatches(
   currentMatches: GeneratedMatch[],
   availablePlayers: AlgorithmPlayer[],
   weights: ScoringWeights,
-  context: { gamesPlayedMap: Map<string, number>; matchHistory: any[] }
+  context: { gamesPlayedMap: Map<string, number>; matchHistory: MatchHistory[] }
 ): GeneratedMatch[] {
   const usedPlayerIds = new Set<string>();
 
