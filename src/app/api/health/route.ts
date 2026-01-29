@@ -33,8 +33,7 @@ export async function GET() {
     return NextResponse.json(checks, { status: 200 });
   } catch (error) {
     checks.database.connected = false;
-    checks.database.error =
-      error instanceof Error ? error.message : 'Unknown error';
+    checks.database.error = error instanceof Error ? error.message : 'Unknown error';
     checks.status = 'unhealthy';
 
     // More specific error messages
