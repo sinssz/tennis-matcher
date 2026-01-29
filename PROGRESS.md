@@ -190,13 +190,75 @@ src/
 
 ---
 
-## Phase 4: 프론트엔드 UI
+## Phase 4: 프론트엔드 UI ✅ 완료
 
-(예정)
+### 완료된 작업
+
+- [x] 4.1 Players 페이지 구현 (목록, 생성, 수정, 삭제)
+- [x] 4.2 Events 페이지 구현 (목록, 생성, 상세)
+- [x] 4.3 대진표 화면 구현 (라운드별 매치, 점수 입력)
+- [x] 4.4 참가자 선택 기능 구현
+- [x] 4.5 Stats 페이지 구현 (통계 테이블, 정렬)
+- [x] 4.6 반응형 디자인 적용 (모바일/데스크톱)
+
+### 커밋 이력
+
+| 커밋    | 설명                                                    | 날짜       |
+| ------- | ------------------------------------------------------- | ---------- |
+| 737371b | feat: implement Players page UI with CRUD functionality | 2026-01-29 |
+| 108152c | feat: implement Events and Stats pages with full UI     | 2026-01-29 |
+
+### 구현된 페이지
+
+**Players 페이지** (src/app/players/)
+
+- PlayerList: 테이블(데스크톱) / 카드(모바일) 뷰
+- PlayerForm: Dialog 기반 생성/수정 폼
+- PlayerCard: 모바일 카드 컴포넌트
+- 기능: 목록, 생성, 수정, 삭제, 활성/비활성 필터
+
+**Events 페이지** (src/app/events/)
+
+- EventList: 이벤트 목록 (카드 형식)
+- EventForm: 이벤트 생성 Dialog
+- ParticipantSelector: 참가자 선택 (체크박스)
+- MatchCard: 개별 매치 카드 (팀, 점수)
+- RoundView: 라운드별 매치 그룹핑
+- ScoreInput: 점수 입력 Dialog
+- 기능: 이벤트 생성, 참가자 추가, 대진 생성, 점수 입력
+
+**Stats 페이지** (src/app/stats/)
+
+- StatsTable: 플레이어 통계 테이블
+- 기능: 정렬 (이름, 경기수, 승, 승률), 반응형 뷰
+
+### UI 컴포넌트
+
+새로 추가된 shadcn/ui 컴포넌트:
+
+- alert-dialog (삭제 확인)
+- radio-group (성별 선택)
+- checkbox (참가자 선택)
+
+### 디자인 특징
+
+- **반응형 디자인**: 모바일 퍼스트, Tailwind 브레이크포인트
+- **일관된 스타일**: shadcn/ui 컴포넌트 활용
+- **접근성**: 시맨틱 HTML, ARIA 속성
+- **UX**: 로딩/에러 상태, 확인 다이얼로그, 한글 메시지
+
+---
 
 ## Phase 5: 통계 및 마무리
 
-(예정)
+### 남은 작업
+
+- [ ] 5.1 E2E 테스트 작성 (Playwright)
+- [ ] 5.2 에러 처리 개선
+- [ ] 5.3 로딩 상태 스켈레톤 추가
+- [ ] 5.4 성능 최적화
+
+---
 
 ## Phase 6: 배포
 
@@ -206,9 +268,9 @@ src/
 
 ## 다음 작업
 
-1. 프론트엔드 UI 컴포넌트 개발 (참가자 관리, 이벤트 생성, 대진 생성)
-2. 데이터베이스 실제 연결 및 데이터 적용
-3. E2E 테스트 추가
+1. 데이터베이스 연결 테스트 (로컬 또는 Supabase)
+2. E2E 테스트 작성
+3. Vercel 배포
 
 ## 실행 방법
 
