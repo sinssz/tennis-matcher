@@ -354,6 +354,54 @@ DATABASE_URL="postgresql://..."
 
 ---
 
+## Phase 7: 빌드 오류 수정 ✅ 완료
+
+### 완료된 작업
+
+- [x] 7.1 PrismaClient 임포트 오류 수정
+- [x] 7.2 postinstall 스크립트 추가
+- [x] 7.3 Stats API 동적 라우트 설정
+
+### 커밋 이력
+
+| 커밋    | 설명                                                | 날짜       |
+| ------- | --------------------------------------------------- | ---------- |
+| 271f67d | fix: resolve build errors and add postinstall script | 2026-01-29 |
+
+### 수정 내용
+
+**package.json**
+- `postinstall` 스크립트 추가: Prisma 클라이언트 자동 생성
+- 빌드 전 자동으로 `prisma generate` 실행
+
+**src/app/api/stats/players/route.ts**
+- `export const dynamic = 'force-dynamic'` 추가
+- Next.js 정적 프리렌더링 시도로 인한 오류 해결
+
+### 해결된 문제
+
+1. **PrismaClient 임포트 오류**
+   - 증상: `Module '@prisma/client' has no exported member 'PrismaClient'`
+   - 원인: Prisma 클라이언트가 생성되지 않은 상태에서 빌드 시도
+   - 해결: `postinstall` 스크립트로 자동 생성 보장
+
+2. **Stats API 동적 서버 오류**
+   - 증상: `Dynamic server usage: Route couldn't be rendered statically`
+   - 원인: `request.url` 사용으로 정적 프리렌더링 불가
+   - 해결: `dynamic = 'force-dynamic'` 명시적 설정
+
+### 빌드 검증
+
+```bash
+✓ Compiled successfully
+✓ Linting and checking validity of types
+✓ Generating static pages (10/10)
+```
+
+프로덕션 빌드 성공 확인 완료!
+
+---
+
 ## 프로젝트 완성도
 
 ### ✅ 완료된 기능
@@ -369,7 +417,7 @@ DATABASE_URL="postgresql://..."
 
 ### 📊 최종 통계
 
-- **총 커밋**: 21개
+- **총 커밋**: 22개
 - **코드 라인**: ~5,000+ 라인
 - **API 엔드포인트**: 14개
 - **UI 컴포넌트**: 20+ 개
