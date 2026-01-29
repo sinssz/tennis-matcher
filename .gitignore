@@ -34,6 +34,7 @@ coverage
 # Prisma
 prisma/*.db
 prisma/*.db-journal
+node_modules/.prisma
 
 # Vercel
 .vercel
