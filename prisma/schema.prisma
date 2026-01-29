@@ -1,0 +1,132 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 참가자 (회원)
+model Player {
+  id        String   @id @default(cuid())
+  name      String
+  gender    Gender
+  level     Level
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  eventParticipants EventParticipant[]
+  matchPlayers      MatchPlayer[]
+
+  @@index([gender, level])
+  @@index([isActive])
+}
+
+// 이벤트 (모임/대회)
+model Event {
+  id          String      @id @default(cuid())
+  name        String
+  date        DateTime
+  status      EventStatus @default(DRAFT)
+  totalRounds Int         @default(0)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  participants EventParticipant[]
+  matches      Match[]
+
+  @@index([date])
+  @@index([status])
+}
+
+// 이벤트 참가자 (다대다 관계 + 추가 정보)
+model EventParticipant {
+  id          String   @id @default(cuid())
+  eventId     String
+  playerId    String
+  gamesPlayed Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  // Relations
+  event  Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, playerId])
+  @@index([eventId])
+  @@index([playerId])
+}
+
+// 매치 (경기)
+model Match {
+  id          String      @id @default(cuid())
+  eventId     String
+  roundNumber Int
+  courtNumber Int         @default(1)
+  matchType   MatchType
+  status      MatchStatus @default(SCHEDULED)
+  team1Score  Int?
+  team2Score  Int?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  // Relations
+  event   Event         @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  players MatchPlayer[]
+
+  @@index([eventId, roundNumber])
+  @@index([status])
+}
+
+// 매치 참가자 (매치-플레이어 다대다 관계)
+model MatchPlayer {
+  id        String   @id @default(cuid())
+  matchId   String
+  playerId  String
+  team      Int      // 1 or 2
+  createdAt DateTime @default(now())
+
+  // Relations
+  match  Match  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  player Player @relation(fields: [playerId], references: [id])
+
+  @@unique([matchId, playerId])
+  @@index([matchId])
+  @@index([playerId])
+}
+
+// Enums
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Level {
+  A
+  B
+  C
+  D
+}
+
+enum EventStatus {
+  DRAFT      // 준비 중
+  ACTIVE     // 진행 중
+  COMPLETED  // 완료
+}
+
+enum MatchType {
+  SINGLES
+  DOUBLES
+}
+
+enum MatchStatus {
+  SCHEDULED   // 예정
+  IN_PROGRESS // 진행 중
+  COMPLETED   // 완료
+}
