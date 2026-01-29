@@ -61,15 +61,41 @@ src/
 
 ---
 
-## Phase 2: 데이터베이스 및 API
-(다음 작업)
+## Phase 2: 데이터베이스 및 API ✅ 완료
 
-### 예정 작업
-- [ ] 2.1 Supabase 프로젝트 생성 (또는 로컬 PostgreSQL)
-- [ ] 2.2 DB 마이그레이션 실행
-- [ ] 2.3 Players CRUD API 구현
-- [ ] 2.4 Events CRUD API 구현
-- [ ] 2.5 시드 데이터 작성
+### 완료된 작업
+- [x] 2.1 데이터베이스 연결 설정 (.env 파일)
+- [x] 2.2 Players CRUD API 구현 (5개 엔드포인트)
+- [x] 2.3 Events CRUD API 구현 (6개 엔드포인트)
+- [x] 2.4 시드 데이터 작성 (12 플레이어, 1 이벤트)
+
+### 커밋 이력
+| 커밋 | 설명 | 날짜 |
+|------|------|------|
+| f88c67f | feat: implement Players CRUD API | 2026-01-29 |
+| e9b6099 | feat: implement Events CRUD API and seed data | 2026-01-29 |
+
+### API 엔드포인트
+
+**Players API** (src/app/api/players/)
+- `GET /api/players` - 참가자 목록 (isActive 필터)
+- `POST /api/players` - 참가자 생성
+- `GET /api/players/[id]` - 참가자 조회
+- `PUT /api/players/[id]` - 참가자 수정
+- `DELETE /api/players/[id]` - 참가자 삭제
+
+**Events API** (src/app/api/events/)
+- `GET /api/events` - 이벤트 목록
+- `POST /api/events` - 이벤트 생성
+- `GET /api/events/[id]` - 이벤트 상세 (참가자, 매치 포함)
+- `PUT /api/events/[id]` - 이벤트 수정
+- `DELETE /api/events/[id]` - 이벤트 삭제
+- `POST /api/events/[id]/participants` - 참가자 추가
+
+### 시드 데이터
+- 12명 샘플 플레이어 (남성 6, 여성 6, A/B/C/D 등급 분포)
+- 1개 샘플 이벤트 (10명 참가자)
+- 실행: `pnpm db:seed`
 
 ---
 
