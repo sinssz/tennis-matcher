@@ -85,17 +85,6 @@ function findBestMatches(
           });
         }
       }
-
-      if (n % 2 === 1) {
-        const team2 = [availablePlayers[k]];
-        const score = calculateTotalScore(team1, team2, weights, context);
-        possibleMatches.push({
-          team1,
-          team2,
-          score,
-          matchType: 'SINGLES' as const,
-        });
-      }
     }
   }
 
